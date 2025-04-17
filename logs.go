@@ -34,7 +34,7 @@ func (l *LogsOptions) params() url.Values {
 		params.Set("state", l.Filter.State)
 	}
 	if l.Filter.Url != "" {
-		params.Set("url", l.Filter.Url)
+		params.Set("workflowUrl", l.Filter.Url)
 	}
 	if l.Filter.CreatedAt != 0 {
 		params.Set("workflowCreatedAt", strconv.FormatInt(l.Filter.CreatedAt, 10))
