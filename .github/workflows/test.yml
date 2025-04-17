@@ -39,7 +39,7 @@ jobs:
           
           for i in {1..600}; do
             echo "Pinging QStash server..."
-            status=$(curl -s -o /dev/null -w "%{http_code}" -X GET "${QSTASH_URL}/v2/liveness" || echo "NAN")
+            status=$(curl -s -o /dev/null -w "%{http_code}" -X GET "${QSTASH_URL}/v2/liveness" -H "Authorization: Bearer ${QSTASH_TOKEN}" || echo "NAN")
             echo "HTTP status: $status"
             if [ "$status" = "200" ]; then
               echo "QStash development server is ready!"
