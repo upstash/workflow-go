@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 	workflow "workflow-go"
 )
 
@@ -71,10 +72,12 @@ func main() {
 	}
 	fmt.Printf("found %d workflow runs for the specified URL\n", len(runs))
 
-	// Fetch logs for workflows created after a specific timestamp
+	// Fetch a specific workflow run by creation time
+	// This is because there might be multiple runs with the same ID
 	runs, _, err = client.Logs(workflow.LogsOptions{
 		Filter: workflow.LogFilter{
-			CreatedAt: 1649885469000, // Unix timestamp in milliseconds (April 13, 2022)
+			RunId:     "workflow-run-id",
+			CreatedAt: time.Now(),
 		},
 	})
 	if err != nil {
@@ -86,7 +89,7 @@ func main() {
 	// Fetch logs for workflows in a specific state
 	runs, _, err = client.Logs(workflow.LogsOptions{
 		Filter: workflow.LogFilter{
-			State: "COMPLETED", // States can be: COMPLETED, RUNNING, FAILED, etc.
+			State: "RUN_SUCCESS",
 		},
 	})
 	if err != nil {
@@ -99,7 +102,7 @@ func main() {
 	runs, _, err = client.Logs(workflow.LogsOptions{
 		Count: 5,
 		Filter: workflow.LogFilter{
-			State: "FAILED",
+			State: "RUN_FAILED",
 			Url:   "https://example.com/api/workflow",
 		},
 	})

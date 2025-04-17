@@ -152,3 +152,32 @@ if err != nil {
     // handle err
 }
 ```
+
+### Fetch Logs
+
+Get the logs for workflow runs with filtering.
+
+```go
+runs, cursor, err := client.Logs(workflow.LogsOptions{})
+if err != nil {
+    // handle err
+}
+
+runs, cursor, err = client.Logs(workflow.LogsOptions{
+    Filter: workflow.LogFilter{
+        RunId: "workflow-run-id",
+    },
+})
+if err != nil {
+	// handle err
+}
+
+runs, cursor, err = client.Logs(workflow.LogsOptions{
+    Filter: workflow.LogFilter{
+        State: "RUN_SUCCESS",
+    },
+})
+if err != nil {
+	// handle err
+}
+```

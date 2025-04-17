@@ -4,18 +4,30 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
 )
 
 type LogFilter struct {
-	RunId     string
-	Url       string
-	CreatedAt int64
-	State     string
+	// RunId filters workflow runs by the ID of the run.
+	RunId string
+	// Url filters workflow runs by the URL of the workflow runs.
+	Url string
+	// CreatedAt filters workflow runs by creation time.
+	CreatedAt time.Time
+	// State filters workflow runs by the state of the run.
+	State string
+	// FromDate filters workflow runs by starting time in milliseconds.
+	FromDate time.Time
+	// ToDate filters workflow runs by ending time in milliseconds.
+	ToDate time.Time
 }
 
 type LogsOptions struct {
+	// Cursor is the starting point for listing workflow runs.
 	Cursor string
-	Count  int
+	// Count is the maximum number of workflow runs to return.
+	Count int
+	// Filter is the filter to apply.
 	Filter LogFilter
 }
 
@@ -36,8 +48,14 @@ func (l *LogsOptions) params() url.Values {
 	if l.Filter.Url != "" {
 		params.Set("workflowUrl", l.Filter.Url)
 	}
-	if l.Filter.CreatedAt != 0 {
-		params.Set("workflowCreatedAt", strconv.FormatInt(l.Filter.CreatedAt, 10))
+	if !l.Filter.CreatedAt.IsZero() {
+		params.Set("workflowCreatedAt", strconv.FormatInt(l.Filter.CreatedAt.UnixMilli(), 10))
+	}
+	if !l.Filter.FromDate.IsZero() {
+		params.Set("fromDate", strconv.FormatInt(l.Filter.FromDate.UnixMilli(), 10))
+	}
+	if !l.Filter.ToDate.IsZero() {
+		params.Set("toDate", strconv.FormatInt(l.Filter.ToDate.UnixMilli(), 10))
 	}
 	return params
 }

@@ -2,12 +2,6 @@ package workflow
 
 import "net/http"
 
-type RunResponse struct {
-	Body       string `json:"body,omitempty"`
-	IsCanceled bool   `json:"isCanceled"`
-	IsFailed   bool   `json:"isFailed"`
-}
-
 type InvokerContext struct {
 	WorkflowRunId     string `json:"workflowRunId,omitempty"`
 	WorkflowUrl       string `json:"workflowUrl,omitempty"`

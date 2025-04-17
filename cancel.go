@@ -7,9 +7,12 @@ import (
 )
 
 type CancelFilter struct {
+	// UrlStartingWith is the URL prefix of the workflow runs to be canceled.
 	UrlStartingWith string
-	RunIds          []string
+	// RunIds is the list of workflow run IDs to be canceled.
+	RunIds []string
 }
+
 type cancelRequest struct {
 	RunIds []string `json:"workflowRunIds,omitempty"`
 	Url    string   `json:"workflowUrl,omitempty"`

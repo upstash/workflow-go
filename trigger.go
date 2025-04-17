@@ -52,8 +52,8 @@ func (o *TriggerOptions) header() http.Header {
 			value += "parallelism=" + strconv.Itoa(*o.Parallelism)
 		}
 		if len(value) > 0 {
-			header.Set("Upstash-Flow-Control-Key", o.FlowControlKey)
-			header.Set("Upstash-Flow-Control-Value", value)
+			header.Set(flowControlKeyHeader, o.FlowControlKey)
+			header.Set(flowControlValueHeader, value)
 		}
 	}
 	header.Set(fmt.Sprintf("%s%s", forwardPrefix, sdkVersionHeader), sdkVersion)
@@ -63,7 +63,7 @@ func (o *TriggerOptions) header() http.Header {
 		}
 	}
 	if o.Retries != nil {
-		header.Set("Upstash-Retries", strconv.Itoa(*o.Retries))
+		header.Set(retriesHeader, strconv.Itoa(*o.Retries))
 	}
 	return header
 }
@@ -77,14 +77,11 @@ func (c *Client) Trigger(opts TriggerOptions) (runId string, err error) {
 	if err = opts.validate(); err != nil {
 		return "", fmt.Errorf("failed to validate options: %w", err)
 	}
-	body, isJSON, err := serializeToStr(opts.Body)
+	body, _, err := serializeToStr(opts.Body)
 	if err != nil {
 		return "", fmt.Errorf("failed to serialize body: %w", err)
 	}
 	header := opts.header()
-	if isJSON {
-		header.Set(contentTypeHeader, "application/json")
-	}
 	req := requestOptions{
 		method: http.MethodPost,
 		path:   []string{"v2", "publish", opts.Url},
