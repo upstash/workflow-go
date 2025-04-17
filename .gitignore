@@ -1,0 +1,106 @@
+# Go specific
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.prof
+*.o
+*.a
+*.swp
+
+# Output directories
+/bin/
+/pkg/
+/vendor/
+
+# Go workspace file
+go.work
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+*.cov
+
+# IDE specific files
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+.DS_Store
+
+# OS specific
+## macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+## Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+
+## Linux
+*~
+.directory
+.Trash-*
+
+# Log files
+*.log
+
+# Coverage
+coverage.txt
+coverage.html
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+test_workflow/node_modules
+test_workflow/.pnp
+test_workflow/.pnp.*
+test_workflow/.yarn/*
+test_workflow/!.yarn/patches
+test_workflow/!.yarn/plugins
+test_workflow/!.yarn/releases
+test_workflow/!.yarn/versions
+
+# testing
+test_workflow/coverage
+
+# next.js
+test_workflow/.next/
+test_workflow/out/
+
+# production
+test_workflow/build
+
+# misc
+test_workflow/.DS_Store
+test_workflow/*.pem
+
+# debug
+test_workflow/npm-debug.log*
+test_workflow/yarn-debug.log*
+test_workflow/yarn-error.log*
+test_workflow/.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+test_workflow/.env*
+
+# vercel
+test_workflow/.vercel
+
+# typescript
+test_workflow/*.tsbuildinfo
+test_workflow/next-env.d.ts
+test_workflow/package-lock.json
