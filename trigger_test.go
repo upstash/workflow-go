@@ -60,7 +60,6 @@ func TestTrigger(t *testing.T) {
 		waitUntilRunState(t, client, runId, "RUN_FAILED")
 	})
 
-	// Test with custom headers
 	t.Run("with custom headers", func(t *testing.T) {
 		customHeaders := http.Header{}
 		customHeaders.Set("X-Custom-Header", "test-value")
