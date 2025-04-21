@@ -1,4 +1,4 @@
-module workflow-go
+module github.com/upstash/workflow-go
 
 go 1.23
 
