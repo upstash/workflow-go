@@ -4,7 +4,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"time"
 	workflow "workflow-go"
 )
 
@@ -26,9 +25,9 @@ func TestNotify(t *testing.T) {
 	})
 
 	eventId := uuid.NewString()
-	expectedEventData := jsonMarshall(t, map[string]string{
+	expectedEventData := map[string]string{
 		"uuid": uuid.NewString(),
-	})
+	}
 	runId, err := client.Trigger(workflow.TriggerOptions{
 		Url: waitForEvent,
 		Body: jsonMarshall(t, map[string]any{
@@ -39,30 +38,9 @@ func TestNotify(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, runId)
 
-	assert.Eventually(t, func() bool {
-		subT := &testing.T{}
+	waitUntilWaitStep(t, client, runId)
 
-		runs, cursor, err := client.Logs(workflow.LogsOptions{
-			Filter: workflow.LogFilter{
-				RunId: runId,
-			},
-		})
-		assert.NoError(subT, err)
-		assert.Empty(subT, cursor)
-		if len(runs) != 1 {
-			return false
-		}
-		run := runs[0]
-		assert.Len(subT, run.GroupedSteps, 3)
-		if len(run.GroupedSteps[len(run.GroupedSteps)-1].Steps) != 1 {
-			return false
-		}
-		lastStep := run.GroupedSteps[len(run.GroupedSteps)-1].Steps[0]
-		assert.Equal(subT, lastStep.StepType, "Wait")
-		return !subT.Failed()
-	}, time.Minute, time.Millisecond*100)
-
-	messages, err := client.Notify(eventId, expectedEventData)
+	messages, err := client.Notify(eventId, jsonMarshall(t, expectedEventData))
 	assert.NoError(t, err)
 	assert.Len(t, messages, 1)
 
