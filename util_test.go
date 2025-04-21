@@ -1,6 +1,7 @@
 package workflow_test
 
 import (
+	"encoding/json"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"strings"
@@ -82,4 +83,10 @@ func waitUntilWaitStep(t *testing.T, client *workflow.Client, runId string) {
 		assert.Equal(subT, lastStep.StepType, "Wait")
 		return !subT.Failed()
 	}, time.Minute, time.Millisecond*100)
+}
+
+func jsonMarshall(t *testing.T, data any) []byte {
+	marshallData, err := json.Marshal(data)
+	assert.NoError(t, err)
+	return marshallData
 }

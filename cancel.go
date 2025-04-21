@@ -61,7 +61,7 @@ func (c *Client) cancel(req cancelRequest) (int, error) {
 	resp, _, err := c.do(requestOptions{
 		method: http.MethodDelete,
 		path:   []string{"v2", "workflows", "runs"},
-		body:   string(data),
+		body:   data,
 		header: http.Header{
 			"Content-Type": []string{"application/json"},
 		},

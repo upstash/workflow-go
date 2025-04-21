@@ -12,7 +12,7 @@ func TestNotify_WithoutWaiter(t *testing.T) {
 	client, err := workflow.NewClientWithEnv()
 	assert.NoError(t, err)
 
-	messages, err := client.Notify(uuid.NewString(), uuid.NewString())
+	messages, err := client.Notify(uuid.NewString(), []byte(uuid.NewString()))
 	assert.NoError(t, err)
 	assert.Len(t, messages, 0)
 }
@@ -26,15 +26,15 @@ func TestNotify(t *testing.T) {
 	})
 
 	eventId := uuid.NewString()
-	expectedEventData := map[string]string{
+	expectedEventData := jsonMarshall(t, map[string]string{
 		"uuid": uuid.NewString(),
-	}
+	})
 	runId, err := client.Trigger(workflow.TriggerOptions{
 		Url: waitForEvent,
-		Body: map[string]any{
+		Body: jsonMarshall(t, map[string]any{
 			"eventId":           eventId,
 			"expectedEventData": expectedEventData,
-		},
+		}),
 	})
 	assert.NoError(t, err)
 	assert.NotEmpty(t, runId)

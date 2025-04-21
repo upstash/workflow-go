@@ -14,10 +14,10 @@ func TestLogs(t *testing.T) {
 	for i := 0; i < 3; i++ {
 		runId, err := client.Trigger(workflow.TriggerOptions{
 			Url: simpleWorkflowUrl,
-			Body: map[string]string{
+			Body: jsonMarshall(t, map[string]string{
 				"name": "Run Test User",
 				"id":   string(rune(65 + i)),
-			},
+			}),
 		})
 		assert.NoError(t, err)
 		assert.NotEmpty(t, runId)
@@ -26,9 +26,9 @@ func TestLogs(t *testing.T) {
 
 	longRunId, err := client.Trigger(workflow.TriggerOptions{
 		Url: longRunningWorkflow,
-		Body: map[string]string{
+		Body: jsonMarshall(t, map[string]string{
 			"name": "Long Running Test",
-		},
+		}),
 	})
 	assert.NoError(t, err)
 	assert.NotEmpty(t, longRunId)

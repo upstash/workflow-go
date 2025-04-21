@@ -95,12 +95,7 @@ Start a new workflow run with provided options.
 ```go
 runID, err := client.Trigger(workflow.TriggerOptions{
     Url: "https://your-workflow-endpoint.com/api/process"
-    Body: map[string]interface{}{
-        "user_id":    12345,
-        "action":     "purchase",
-        "items":      []string{"item1", "item2", "item3"},
-        "total_cost": 99.99,
-    },
+    Body: []byte("request payload"),
 })
 if err != nil {
     // handle err
@@ -113,9 +108,7 @@ Send a notify message to workflows waiting for a specific event.
 
 ```go
 
-messages, err := client.Notify("event-id", map[string]string{
-		"userId": "testUser",
-})
+messages, err := client.Notify("event-id", []byte("notify data"))
 if err != nil {
     // handle err
 }

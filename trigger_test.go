@@ -1,7 +1,6 @@
 package workflow_test
 
 import (
-	"encoding/json"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -21,9 +20,9 @@ func TestTrigger(t *testing.T) {
 	t.Run("basic trigger", func(t *testing.T) {
 		runId, err := client.Trigger(workflow.TriggerOptions{
 			Url: simpleWorkflowUrl,
-			Body: map[string]string{
+			Body: jsonMarshall(t, map[string]string{
 				"name": "John Doe",
-			},
+			}),
 		})
 		assert.NoError(t, err)
 		assert.NotEmpty(t, runId)
@@ -36,9 +35,9 @@ func TestTrigger(t *testing.T) {
 		runId, err := client.Trigger(workflow.TriggerOptions{
 			Url:   simpleWorkflowUrl,
 			RunId: customId,
-			Body: map[string]string{
+			Body: jsonMarshall(t, map[string]string{
 				"name": "Custom ID Test",
-			},
+			}),
 		})
 		assert.NoError(t, err)
 		assert.Equal(t, customId, runId)
@@ -50,9 +49,9 @@ func TestTrigger(t *testing.T) {
 		runId, err := client.Trigger(workflow.TriggerOptions{
 			Url:     failingWorkflow,
 			Retries: workflow.Retry(0),
-			Body: map[string]string{
+			Body: jsonMarshall(t, map[string]string{
 				"name": "Retry Test",
-			},
+			}),
 		})
 		assert.NoError(t, err)
 		assert.NotEmpty(t, runId)
@@ -68,9 +67,9 @@ func TestTrigger(t *testing.T) {
 		runId, err := client.Trigger(workflow.TriggerOptions{
 			Url:    simpleWorkflowUrl,
 			Header: customHeaders,
-			Body: map[string]string{
+			Body: jsonMarshall(t, map[string]string{
 				"name": "Custom Headers Test",
-			},
+			}),
 		})
 		assert.NoError(t, err)
 		assert.NotEmpty(t, runId)
@@ -98,7 +97,7 @@ func TestTrigger(t *testing.T) {
 		body := "plain text body content"
 		runId, err := client.Trigger(workflow.TriggerOptions{
 			Url:  simpleWorkflowUrl,
-			Body: "plain text body content",
+			Body: []byte("plain text body content"),
 		})
 		assert.NoError(t, err)
 		assert.NotEmpty(t, runId)
@@ -112,10 +111,10 @@ func TestTrigger(t *testing.T) {
 			Name  string `json:"name"`
 			Value int    `json:"value"`
 		}
-		requestPayload := TestStruct{
+		requestPayload := jsonMarshall(t, TestStruct{
 			Name:  "Struct Test",
 			Value: 42,
-		}
+		})
 		runId, err := client.Trigger(workflow.TriggerOptions{
 			Url:  simpleWorkflowUrl,
 			Body: requestPayload,
@@ -123,10 +122,7 @@ func TestTrigger(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotEmpty(t, runId)
 
-		data, err := json.Marshal(requestPayload)
-		assert.NoError(t, err)
-
-		assertRequestPayload(t, client, runId, string(data))
+		assertRequestPayload(t, client, runId, string(requestPayload))
 		waitUntilRunState(t, client, runId, "RUN_SUCCESS")
 	})
 
@@ -144,9 +140,9 @@ func TestTrigger(t *testing.T) {
 
 	t.Run("empty url", func(t *testing.T) {
 		_, err := client.Trigger(workflow.TriggerOptions{
-			Body: map[string]string{
+			Body: jsonMarshall(t, map[string]string{
 				"name": "Error Test",
-			},
+			}),
 		})
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "url is required")

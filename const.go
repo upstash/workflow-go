@@ -10,6 +10,7 @@ const (
 	forwardPrefix = "Upstash-Forward-"
 
 	authorizationHeader = "Authorization"
+	contentTypeHeader   = "Content-Type"
 
 	initHeader             = "Upstash-Workflow-Init"
 	runIdHeader            = "Upstash-Workflow-Runid"

@@ -18,12 +18,12 @@ func TestWaiters(t *testing.T) {
 	eventId := uuid.NewString()
 	runId, err := client.Trigger(workflow.TriggerOptions{
 		Url: waitForEvent,
-		Body: map[string]any{
+		Body: jsonMarshall(t, map[string]any{
 			"eventId": eventId,
 			"expectedEventData": map[string]string{
 				"test": "data",
 			},
-		},
+		}),
 	})
 	assert.NoError(t, err)
 	assert.NotEmpty(t, runId)
@@ -39,9 +39,9 @@ func TestWaiters(t *testing.T) {
 		assert.Equal(t, waiter.Headers.Get("Upstash-Workflow-Runid"), runId)
 	}
 
-	resp, err := client.Notify(eventId, map[string]string{
+	resp, err := client.Notify(eventId, jsonMarshall(t, map[string]string{
 		"test": "data",
-	})
+	}))
 	assert.NoError(t, err)
 	assert.NotEmpty(t, resp)
 
@@ -79,12 +79,12 @@ func TestWaiters_MultipleEventIdsAndRuns(t *testing.T) {
 		for j := 0; j < 2; j++ {
 			runId, err := client.Trigger(workflow.TriggerOptions{
 				Url: waitForEvent,
-				Body: map[string]any{
+				Body: jsonMarshall(t, map[string]any{
 					"eventId": eventId,
 					"expectedEventData": map[string]string{
 						"test": eventId,
 					},
-				},
+				}),
 			})
 			assert.NoError(t, err)
 			assert.NotEmpty(t, runId)

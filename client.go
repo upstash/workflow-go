@@ -1,6 +1,7 @@
 package workflow
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -76,13 +77,13 @@ func NewClientWithEnv() (*Client, error) {
 type requestOptions struct {
 	method string
 	path   []string
-	body   string
+	body   []byte
 	header http.Header
 	params url.Values
 }
 
 func (c *Client) do(opts requestOptions) ([]byte, int, error) {
-	request, err := http.NewRequest(opts.method, fmt.Sprintf("%s%s", c.url, strings.Join(opts.path, "/")), strings.NewReader(opts.body))
+	request, err := http.NewRequest(opts.method, fmt.Sprintf("%s%s", c.url, strings.Join(opts.path, "/")), bytes.NewReader(opts.body))
 	if err != nil {
 		return nil, -1, err
 	}
