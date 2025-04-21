@@ -3,11 +3,11 @@ package workflow_test
 import (
 	"encoding/json"
 	"github.com/stretchr/testify/assert"
+	"github.com/upstash/workflow-go"
 	"os"
 	"strings"
 	"testing"
 	"time"
-	workflow "workflow-go"
 )
 
 var (

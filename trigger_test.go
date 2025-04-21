@@ -3,10 +3,10 @@ package workflow_test
 import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/upstash/workflow-go"
 	"net/http"
 	"testing"
 	"time"
-	workflow "workflow-go"
 )
 
 func TestTrigger(t *testing.T) {

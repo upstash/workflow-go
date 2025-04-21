@@ -2,8 +2,8 @@ package workflow_test
 
 import (
 	"github.com/stretchr/testify/assert"
+	"github.com/upstash/workflow-go"
 	"testing"
-	workflow "workflow-go"
 )
 
 func TestCancel(t *testing.T) {

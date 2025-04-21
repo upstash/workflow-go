@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"workflow-go"
+	"github.com/upstash/workflow-go"
 )
 
 func main() {

@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	workflow "workflow-go"
+	"github.com/upstash/workflow-go"
 )
 
 func main() {
