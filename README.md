@@ -46,7 +46,7 @@ import (
 )
 
 func main() {
-	client := workflow.NewClient("<QSTASH_TOKEN>")
+	client, err := workflow.NewClient("<QSTASH_TOKEN>")
 }
 ```
 
@@ -65,7 +65,7 @@ import (
 )
 
 func main() {
-	client := workflow.NewClientWithEnv()
+	client, err := workflow.NewClientWithEnv()
 }
 ```
 #### Using a custom HTTP client
@@ -80,11 +80,10 @@ import (
 )
 
 func main() {
-	opts := workflow.Options{
-		Token:  "<QSTASH_TOKEN>",
-		Client: &http.Client{},
-	}
-	client := workflow.NewClientWith(opts)
+	client, err := workflow.NewClientWith(workflow.Options{
+        Token:  "<QSTASH_TOKEN>",
+        Client: &http.Client{},
+    })
 }
 ```
 
